@@ -67,7 +67,3 @@ The API will be available at `http://localhost:8000`
 ### Health
 
 - `GET /api/health` - Health check
-
-## API Documentation
-
-Interactive API documentation available at `http://localhost:8000/docs` (Swagger UI)
