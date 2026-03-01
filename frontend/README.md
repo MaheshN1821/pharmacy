@@ -10,6 +10,8 @@ frontend/
 │   ├── components/          # Reusable components
 │   │   ├── Navigation.jsx
 │   │   ├── MedicineDetailsModal.jsx
+│   │   ├── PurchaseModal.jsx
+│   │   ├── SaleModal.jsx
 │   │   └── MedicineForm.jsx
 │   ├── pages/               # Page components
 │   │   ├── Dashboard.jsx
@@ -88,6 +90,8 @@ VITE_API_BASE_URL=http://localhost:8000
 - `Navigation` - Top navigation bar
 - `MedicineForm` - Add/edit medicine modal
 - `MedicineDetailsModal` - To preview details
+- `PurchaseModal` - To create purchase
+- `SaleModal` - To create sale
 
 ## API Integration
 
