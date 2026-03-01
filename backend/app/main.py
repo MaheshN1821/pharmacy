@@ -12,15 +12,20 @@ from schemas import (
     DashboardSummary
 )
 
-# Create all tables
-Base.metadata.create_all(bind=engine)
-
 app = FastAPI(title="Pharmacy EMR API", version="1.0.0")
+
+# Create all tables
+@app.on_event("startup")
+def startup():
+    Base.metadata.create_all(bind=engine)
+
 
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://pharmacy-emr-umber.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -243,6 +248,4 @@ def health_check():
     """Health check endpoint."""
     return {"status": "ok", "message": "Pharmacy EMR API is running"}
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+app = app
