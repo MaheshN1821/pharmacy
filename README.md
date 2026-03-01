@@ -1,7 +1,8 @@
 # Pharmacy EMR API — Documentation
 
 A RESTful backend API for a Pharmacy Electronic Medical Records (EMR) system, built with **FastAPI**, **SQLAlchemy**, and **PostgreSQL (Neon)**. It manages medicine inventory, sales transactions, and purchase orders, and exposes a dashboard for real-time pharmacy analytics.
-Live Link: https://pharmacy-emr-umber.vercel.app/
+
+- Live Link: https://pharmacy-emr-umber.vercel.app/
 ---
 
 ## Table of Contents
