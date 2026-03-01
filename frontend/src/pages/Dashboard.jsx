@@ -19,6 +19,7 @@ import {
 	getDashboardSummary,
 	getRecentSales,
 	getMedicines,
+	updateMedicine,
 	createMedicine,
 } from "../api";
 import MedicineForm from "../components/MedicineForm";
