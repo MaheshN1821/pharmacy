@@ -68,8 +68,13 @@ class PurchaseOrder(Base):
 
 def determine_medicine_status(med: Medicine):
     now = datetime.now(timezone.utc)
-    if med.expiry_date and med.expiry_date <= now:
-        return "expired"
+    # expiry_date stored in DB may be naive (no tz). Normalize to UTC-aware
+    if med.expiry_date:
+        expiry = med.expiry_date
+        if expiry.tzinfo is None:
+            expiry = expiry.replace(tzinfo=timezone.utc)
+        if expiry <= now:
+            return "expired"
     if med.stock_quantity <= 0:
         return "out_of_stock"
     if med.stock_quantity <= med.reorder_level:

@@ -2,6 +2,7 @@ from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, and_, func
+import uuid
 from datetime import datetime, timedelta
 from .database import get_db, engine, Base
 from .models import Medicine, Sale, PurchaseOrder, determine_medicine_status
@@ -24,7 +25,7 @@ def startup():
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "https://pharmacy-emr-umber.vercel.app"
+        "https://pharmacy-emr-umber.vercel.app","http://localhost:5173"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -184,18 +185,24 @@ def create_sale(sale: SaleCreate, db: Session = Depends(get_db)):
     if medicine.stock_quantity < sale.quantity_sold:
         raise HTTPException(status_code=400, detail="Insufficient stock")
     
+    # Generate unique invoice number
+    invoice_number = f"INV-{datetime.utcnow().strftime('%Y%m%d')}-{str(uuid.uuid4())[:8].upper()}"
+    
     total_price = medicine.price_per_unit * sale.quantity_sold
     db_sale = Sale(
         medicine_id=sale.medicine_id,
         quantity_sold=sale.quantity_sold,
         total_price=total_price,
         customer_name=sale.customer_name,
-        notes=sale.notes
+        invoice_number=invoice_number,  
+        payment_method=sale.payment_method or "cash",  
+        notes=sale.notes,
+        status=sale.status or "completed" 
     )
     
     medicine.stock_quantity -= sale.quantity_sold
-    
     medicine.status = determine_medicine_status(medicine)
+    
     db.add(db_sale)
     db.add(medicine)
     db.commit()
@@ -252,5 +259,9 @@ def health_check():
 def default():
     """default endpoint."""
     return {"status": "ok", "message": "Pharmacy EMR API is running"}
+
+# if __name__ == "__main__":
+#     import uvicorn
+#     uvicorn.run(app, host="0.0.0.0", port=8000)
 
 app = app

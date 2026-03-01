@@ -24,6 +24,8 @@ import {
 } from "../api";
 import MedicineForm from "../components/MedicineForm";
 import MedicineDetailsModal from "../components/MedicineDetailsModal";
+import SaleModal from "../components/SaleModal";
+import PurchaseModal from "../components/PurchaseModal";
 
 function Dashboard() {
 	const [summaryData, setSummaryData] = useState(null);
@@ -46,6 +48,8 @@ function Dashboard() {
 		expiryBefore: "",
 		expiryAfter: "",
 	});
+	const [showSaleModal, setShowSaleModal] = useState(false);
+	const [showPurchaseModal, setShowPurchaseModal] = useState(false);
 	const [showFilter, setShowFilter] = useState(false);
 	const toggleFilter = () => setShowFilter((v) => !v);
 
@@ -57,6 +61,24 @@ function Dashboard() {
 	const handleEdit = (medicine) => {
 		setEditingMedicine(medicine);
 		setShowForm(true);
+	};
+
+	const handleSaleSuccess = (saleData) => {
+		setSuccess(
+			`Sale created successfully! Invoice: ${saleData.invoice_number}`,
+		);
+		setShowSaleModal(false);
+		loadDashboardData();
+		setTimeout(() => setSuccess(null), 3000);
+	};
+
+	const handlePurchaseSuccess = (orderData) => {
+		setSuccess(
+			`Purchase order created successfully! Order ID: ${orderData.id}`,
+		);
+		setShowPurchaseModal(false);
+		loadDashboardData();
+		setTimeout(() => setSuccess(null), 3000);
 	};
 
 	const handleFormSubmit = async (formData) => {
@@ -310,6 +332,22 @@ function Dashboard() {
 					/>
 				)}
 
+				{showSaleModal && (
+					<SaleModal
+						medicines={medicines}
+						onClose={() => setShowSaleModal(false)}
+						onSuccess={handleSaleSuccess}
+					/>
+				)}
+
+				{showPurchaseModal && (
+					<PurchaseModal
+						medicines={medicines}
+						onClose={() => setShowPurchaseModal(false)}
+						onSuccess={handlePurchaseSuccess}
+					/>
+				)}
+
 				{/* Tabs Section */}
 				<div className="bg-white rounded-xl shadow-lg">
 					{/* Tab Headers */}
@@ -352,14 +390,28 @@ function Dashboard() {
 							</button>
 						</div>
 						<div className="flex gap-3">
-							<button className="flex items-center gap-2 px-3 py-2 bg-gradient-to-br from-sky-500 to-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium">
+							<button
+								onClick={() => setShowSaleModal(true)}
+								className="flex items-center gap-2 px-3 py-2 bg-gradient-to-br from-sky-500 to-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium"
+							>
+								<Plus size={18} />
+								New Sale
+							</button>
+							<button
+								onClick={() => setShowPurchaseModal(true)}
+								className="flex items-center gap-2 px-4 py-2 bg-white text-black border border-gray-200 rounded-lg text-sm font-medium"
+							>
+								<Plus size={18} />
+								New Purchase
+							</button>
+							{/* <button className="flex items-center gap-2 px-3 py-2 bg-gradient-to-br from-sky-500 to-blue-600 text-white hover:bg-blue-700 rounded-lg text-sm font-medium">
 								<Plus size={18} />
 								New Sale
 							</button>
 							<button className="flex items-center gap-2 px-4 py-2 bg-white text-black border border-gray-200 rounded-lg text-sm font-medium">
 								<Plus size={18} />
 								New Purchase
-							</button>
+							</button> */}
 						</div>
 					</div>
 
