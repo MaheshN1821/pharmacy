@@ -3,9 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import desc, and_, func
 from datetime import datetime, timedelta
-from database import get_db, engine, Base
-from models import Medicine, Sale, PurchaseOrder, determine_medicine_status
-from schemas import (
+from .database import get_db, engine, Base
+from .models import Medicine, Sale, PurchaseOrder, determine_medicine_status
+from .schemas import (
     MedicineCreate, MedicineUpdate, Medicine as MedicineSchema,
     SaleCreate, Sale as SaleSchema,
     PurchaseOrderCreate, PurchaseOrderUpdate, PurchaseOrder as PurchaseOrderSchema,
@@ -246,6 +246,11 @@ def update_purchase_order(order_id: int, order_update: PurchaseOrderUpdate, db: 
 @app.get("/api/health")
 def health_check():
     """Health check endpoint."""
+    return {"status": "ok", "message": "Pharmacy EMR API is running"}
+
+@app.get("/")
+def default():
+    """default endpoint."""
     return {"status": "ok", "message": "Pharmacy EMR API is running"}
 
 app = app
