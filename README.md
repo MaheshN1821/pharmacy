@@ -20,7 +20,7 @@ A RESTful backend API for a Pharmacy Electronic Medical Records (EMR) system, bu
 - [Data Consistency Mechanisms](#data-consistency-mechanisms)
 - [Status Logic](#status-logic)
 - [Running Locally](#running-locally)
-
+- [Frontend Details](#pharmacy-emr-frontend)
 ---
 
 ## Tech Stack
